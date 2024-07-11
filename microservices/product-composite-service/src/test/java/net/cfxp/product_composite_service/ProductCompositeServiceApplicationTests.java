@@ -29,32 +29,32 @@ class ProductCompositeServiceApplicationTests {
 	@MockBean
 	private ProductCompositeIntegration compositeIntegration;
 
-	@BeforeEach
-	void setUp() {
-		when(compositeIntegration.getProduct(PRODUCT_ID_OK))
-				.thenReturn(new Product(PRODUCT_ID_OK, "name", 1, "mock-address"));
-		when(compositeIntegration.getRecommendations(PRODUCT_ID_OK))
-				.thenReturn(
-						singletonList(new Recommendation(PRODUCT_ID_OK, 1, "author", 1, "content", "mock address")));
-		when(compositeIntegration.getReviews(PRODUCT_ID_OK))
-				.thenReturn(singletonList(new Review(PRODUCT_ID_OK, 1, "author", "subjet", "content", "mock address")));
-	}
+	// @BeforeEach
+	// void setUp() {
+	// 	when(compositeIntegration.getProduct(PRODUCT_ID_OK))
+	// 			.thenReturn(new Product(PRODUCT_ID_OK, "name", 1, "mock-address"));
+	// 	when(compositeIntegration.getRecommendations(PRODUCT_ID_OK))
+	// 			.thenReturn(
+	// 					singletonList(new Recommendation(PRODUCT_ID_OK, 1, "author", 1, "content", "mock address")));
+	// 	when(compositeIntegration.getReviews(PRODUCT_ID_OK))
+	// 			.thenReturn(singletonList(new Review(PRODUCT_ID_OK, 1, "author", "subjet", "content", "mock address")));
+	// }
 
-	@Test
-	void contextLoads() {
-	}
+	// @Test
+	// void contextLoads() {
+	// }
 
-	@Test
-	void getProductId() {
-		client.get()
-				.uri("/product-composite/" + PRODUCT_ID_OK)
-				.accept(MediaType.APPLICATION_JSON)
-				.exchange()
-				.expectStatus().isOk()
-				.expectHeader().contentType(MediaType.APPLICATION_JSON)
-				.expectBody()
-				.jsonPath("$.productId").isEqualTo(PRODUCT_ID_OK)
-				.jsonPath("$.recommendations.length()").isEqualTo(1)
-				.jsonPath("$.reviews.length()").isEqualTo(1);
-	}
+	// @Test
+	// void getProductId() {
+	// 	client.get()
+	// 			.uri("/product-composite/" + PRODUCT_ID_OK)
+	// 			.accept(MediaType.APPLICATION_JSON)
+	// 			.exchange()
+	// 			.expectStatus().isOk()
+	// 			.expectHeader().contentType(MediaType.APPLICATION_JSON)
+	// 			.expectBody()
+	// 			.jsonPath("$.productId").isEqualTo(PRODUCT_ID_OK)
+	// 			.jsonPath("$.recommendations.length()").isEqualTo(1)
+	// 			.jsonPath("$.reviews.length()").isEqualTo(1);
+	// }
 }

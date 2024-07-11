@@ -1,15 +1,12 @@
 package net.cfxp.microservice.core.recommendation.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.print.ServiceUI;
+import java.util.logging.Level;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.web.bind.annotation.RestController;
 
 import net.cfxp.api.core.recommendation.Recommendation;
 import net.cfxp.api.core.recommendation.RecommendationService;
@@ -17,6 +14,8 @@ import net.cfxp.api.exceptions.InvalidInputException;
 import net.cfxp.api.util.http.ServiceUtil;
 import net.cfxp.microservice.core.recommendation.persistence.RecommendationEntity;
 import net.cfxp.microservice.core.recommendation.persistence.RecommendationRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 public class RecommendationServiceImpl implements RecommendationService {
@@ -27,6 +26,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     private final RecommendationMapper mapper;
     private final ServiceUtil serviceUtil;
 
+    @Autowired
     public RecommendationServiceImpl(RecommendationRepository repository, RecommendationMapper mapper,
             ServiceUtil serviceUtil) {
         this.repository = repository;
@@ -35,49 +35,36 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     @Override
-    public Recommendation createRecommendation(Recommendation body) {
-        try {
-            RecommendationEntity entity = mapper.apiToEntity(body);
-            RecommendationEntity newEntity = repository.save(entity);
+    public Mono<Recommendation> createRecommendation(Recommendation body) {
 
-            LOG.debug("createREcommendation: created a recommendation entity: {}/{}", body.getProductId(),
-                    body.getRecommendationId());
-            return mapper.entityToApi(newEntity);
-        } catch (DuplicateKeyException dke) {
-            throw new InvalidInputException("Duplicate key, Product Id: " + body.getProductId()
-                    + ", Recommendation Id: " + body.getRecommendationId());
-        }
+        RecommendationEntity entity = mapper.apiToEntity(body);
+        Mono<Recommendation> newEntity = repository.save(entity).log(LOG.getName(), Level.FINE)
+                .onErrorMap(DuplicateKeyException.class, ex -> new InvalidInputException("Duplicate key, Product Id: "
+                        + body.getProductId() + ",Recommendation Id: " + body.getRecommendationId()))
+                .map(e -> mapper.entityToApi(e));
+
+        return newEntity;
     }
 
     @Override
-    public List<Recommendation> getRecommendations(int productId) {
+    public Flux<Recommendation> getRecommendations(int productId) {
         if (productId < 1) {
             throw new InvalidInputException("Invalid productId: " + productId);
         }
-        // if (productId == 113) {
-        // LOG.debug("No recommendation found for productId: {}", productId);
-        // return new ArrayList<>();
-        // }
-        List<RecommendationEntity> entityList = repository.findByProductId(productId);
-        List<Recommendation> list = mapper.entityListToApiList(entityList);
-        list.forEach(e -> e.setServiceAddress(serviceUtil.getServiceAddress()));
 
-        // list.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1",
-        // serviceUtil.getServiceAddress()));
-        // list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2",
-        // serviceUtil.getServiceAddress()));
-        // list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3",
-        // serviceUtil.getServiceAddress()));
-
-        LOG.debug("/recommendation response size: {}", list.size());
-
-        return list;
+        return repository.findByProductId(productId).log(LOG.getName(), Level.FINE).map(e -> mapper.entityToApi(e))
+                .map(e -> setServiceAddress(e));
     }
 
     @Override
-    public void deleteRecommendation(int productId) {
+    public Mono<Void> deleteRecommendation(int productId) {
         LOG.debug("deleteRecommendations: tries to delete recommendations for the product with productId: {}",
                 productId);
-        repository.deleteAll(repository.findByProductId(productId));
+        return repository.deleteAll(repository.findByProductId(productId));
+    }
+
+    private Recommendation setServiceAddress(Recommendation e) {
+        e.setServiceAddress(serviceUtil.getServiceAddress());
+        return e;
     }
 }

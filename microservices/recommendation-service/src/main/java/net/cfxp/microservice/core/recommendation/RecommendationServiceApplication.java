@@ -16,11 +16,13 @@ import org.springframework.data.mongodb.core.index.IndexResolver;
 import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import net.cfxp.microservice.core.recommendation.persistence.RecommendationEntity;
 
 @SpringBootApplication
 @ComponentScan("net.cfxp")
+@EnableMongoRepositories
 public class RecommendationServiceApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(RecommendationServiceApplication.class);
