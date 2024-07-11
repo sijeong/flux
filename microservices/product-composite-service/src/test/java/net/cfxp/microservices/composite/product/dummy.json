@@ -1,0 +1,27 @@
+{
+    "productId": 5,
+    "name": "string",
+    "weight": 0,
+    "recommendations": [
+      {
+        "recommendationId": 0,
+        "author": "string",
+        "rate": 0,
+        "content": "string"
+      }
+    ],
+    "reviews": [
+      {
+        "reviewId": 0,
+        "author": "string",
+        "subject": "string",
+        "content": "string"
+      }
+    ],
+    "serviceAddresses": {
+      "cmp": "string",
+      "pro": "string",
+      "rev": "string",
+      "rec": "string"
+    }
+  }

@@ -1,4 +1,4 @@
-package net.cfxp.microservice.core.recommendation.persistence;
+package net.cfxp.microservices.core.recommendation.persistence;
 
 import java.util.List;
 

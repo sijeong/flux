@@ -1,4 +1,4 @@
-package net.cfxp.microservice.core.recommendation;
+package net.cfxp.microservices.core.recommendation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexRes
 import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 
-import net.cfxp.microservice.core.recommendation.persistence.RecommendationEntity;
+import net.cfxp.microservices.core.recommendation.persistence.RecommendationEntity;
 
 @SpringBootApplication
 @ComponentScan("net.cfxp")

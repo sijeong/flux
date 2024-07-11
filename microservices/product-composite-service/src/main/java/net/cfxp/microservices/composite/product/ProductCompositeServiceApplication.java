@@ -1,4 +1,4 @@
-package net.cfxp.product_composite_service;
+package net.cfxp.microservices.composite.product;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

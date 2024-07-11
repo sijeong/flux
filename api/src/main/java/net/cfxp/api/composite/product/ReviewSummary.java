@@ -9,9 +9,7 @@ public class ReviewSummary {
     private final String subject;
     private final String content;
 
-    public String getContent() {
-        return content;
-    }
+
 
     public ReviewSummary() {
         this.reviewId = 0;
@@ -37,6 +35,9 @@ public class ReviewSummary {
 
     public String getSubject() {
         return subject;
+    }
+    public String getContent() {
+        return content;
     }
 
 }

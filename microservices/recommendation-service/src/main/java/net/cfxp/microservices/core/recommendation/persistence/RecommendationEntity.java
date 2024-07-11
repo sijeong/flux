@@ -1,4 +1,4 @@
-package net.cfxp.microservice.core.recommendation.persistence;
+package net.cfxp.microservices.core.recommendation.persistence;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;

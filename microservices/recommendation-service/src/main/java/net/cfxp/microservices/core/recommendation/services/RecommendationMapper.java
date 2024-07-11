@@ -1,4 +1,4 @@
-package net.cfxp.microservice.core.recommendation.services;
+package net.cfxp.microservices.core.recommendation.services;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 import net.cfxp.api.core.recommendation.Recommendation;
-import net.cfxp.microservice.core.recommendation.persistence.RecommendationEntity;
+import net.cfxp.microservices.core.recommendation.persistence.RecommendationEntity;
 
 @Mapper(componentModel = "spring")
 public interface RecommendationMapper {

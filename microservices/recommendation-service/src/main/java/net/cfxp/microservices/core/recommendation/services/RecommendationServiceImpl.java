@@ -1,22 +1,18 @@
-package net.cfxp.microservice.core.recommendation.services;
+package net.cfxp.microservices.core.recommendation.services;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.print.ServiceUI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RestController;
-
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.web.bind.annotation.RestController;
 
 import net.cfxp.api.core.recommendation.Recommendation;
 import net.cfxp.api.core.recommendation.RecommendationService;
 import net.cfxp.api.exceptions.InvalidInputException;
 import net.cfxp.api.util.http.ServiceUtil;
-import net.cfxp.microservice.core.recommendation.persistence.RecommendationEntity;
-import net.cfxp.microservice.core.recommendation.persistence.RecommendationRepository;
+import net.cfxp.microservices.core.recommendation.persistence.RecommendationEntity;
+import net.cfxp.microservices.core.recommendation.persistence.RecommendationRepository;
 
 @RestController
 public class RecommendationServiceImpl implements RecommendationService {

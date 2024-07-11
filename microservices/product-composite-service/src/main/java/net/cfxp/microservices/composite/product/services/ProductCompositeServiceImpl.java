@@ -1,4 +1,4 @@
-package net.cfxp.product_composite_service.services;
+package net.cfxp.microservices.composite.product.services;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,8 +34,9 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
         @Override
         public void createProduct(ProductAggregate body) {
                 try {
-                        LOG.debug("createCompositeProduct: creates a new composite entity for productId: {}",
-                                        body.getProductId());
+                        // LOG.debug("createCompositeProduct: creates a new composite entity for
+                        // productId: {}",
+                        // body.getProductId());
 
                         Product product = new Product(body.getProductId(), body.getName(), body.getWeight(), null);
                         integration.createProduct(product);
@@ -56,10 +57,11 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
                                         integration.createReview(review);
                                 });
                         }
-                        LOG.debug("createCompositeProduct: composite entities created for productId: {}",
-                                        body.getProductId());
+                        // LOG.debug("createCompositeProduct: composite entities created for productId:
+                        // {}",
+                        // body.getProductId());
                 } catch (RuntimeException re) {
-                        LOG.warn("createCompositeProduct fialed:", re);
+                        LOG.warn("createCompositeProduct fialed: {}", re.getMessage());
                         throw re;
                 }
         }
@@ -102,7 +104,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
                 List<RecommendationSummary> recommendationSummaries = (recommendations == null) ? null
                                 : recommendations.stream()
                                                 .map(r -> new RecommendationSummary(r.getRecommendationId(),
-                                                                r.getAuthor(), r.getRate()))
+                                                                r.getAuthor(), r.getRate(), r.getContent()))
                                                 .collect(Collectors.toList());
 
                 List<ReviewSummary> reviewSummaries = (reviews == null) ? null

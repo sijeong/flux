@@ -4,22 +4,16 @@ package net.cfxp.api.composite.product;
  * RecommendationSummary
  */
 public class RecommendationSummary {
-   
-
 
     private final int recommendationId;
     private final String author;
     private final int rate;
     private final String content;
 
-    public String getContent() {
-        return content;
-    }
-
-    public RecommendationSummary(int recommendationId, String author, int rate) {
-        this.recommendationId = recommendationId;
-        this.author = author;
-        this.rate = rate;
+    public RecommendationSummary() {
+        this.recommendationId = 0;
+        this.author = null;
+        this.rate = 0;
         this.content = null;
     }
 
@@ -40,5 +34,9 @@ public class RecommendationSummary {
 
     public int getRate() {
         return rate;
+    }
+
+    public String getContent() {
+        return content;
     }
 }
