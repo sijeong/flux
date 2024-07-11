@@ -5,6 +5,7 @@ import java.util.logging.Level;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -35,30 +36,36 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     private final WebClient webClient;
     private final ObjectMapper mapper;
 
-    private final String productServiceUrl;
-    private final String recommendationServiceUrl;
-    private final String reviewServiceUrl;
+    private static final String PRODUCT_SERVICE_URL = "http://product";
+    private static final String RECOMMENDATION_SERVICE_URL = "http://recommendation";
+    private static final String REVIEW_SERVICE_URL = "http://review";
 
-    public ProductCompositeIntegration(WebClient.Builder webClientBuilder, ObjectMapper mapper,
-            @Value("${app.product-service.host}") String productServiceHost,
-            @Value("${app.product-service.port}") int productSercvicePort,
-            @Value("${app.recommendation-service.host}") String recommendationServiceHost,
-            @Value("${app.recommendation-service.port}") int recommendationServicePort,
-            @Value("${app.review-service.host}") String reviewServiceHost,
-            @Value("${app.review-service.port}") int reviewServicePort) {
+    @Autowired
+    public ProductCompositeIntegration(WebClient.Builder webClientBuilder, ObjectMapper mapper
+    // @Value("${app.product-service.host}") String productServiceHost,
+    // @Value("${app.product-service.port}") int productSercvicePort,
+    // @Value("${app.recommendation-service.host}") String
+    // recommendationServiceHost,
+    // @Value("${app.recommendation-service.port}") int recommendationServicePort,
+    // @Value("${app.review-service.host}") String reviewServiceHost,
+    // @Value("${app.review-service.port}") int reviewServicePort
+    ) {
         this.webClient = webClientBuilder.build();
         this.mapper = mapper;
 
-        this.productServiceUrl = "http://" + productServiceHost + ":" + productSercvicePort + "/product/";
-        this.recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort
-                + "/recommendation?productId=";
-        this.reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review?productId=";
+        // this.productServiceUrl = "http://" + productServiceHost + ":" +
+        // productSercvicePort + "/product/";
+        // this.recommendationServiceUrl = "http://" + recommendationServiceHost + ":" +
+        // recommendationServicePort
+        // + "/recommendation?productId=";
+        // this.reviewServiceUrl = "http://" + reviewServiceHost + ":" +
+        // reviewServicePort + "/review?productId=";
     }
 
     @Override
     public Mono<Product> createProduct(Product body) {
 
-        String url = productServiceUrl;
+        String url = PRODUCT_SERVICE_URL + "/product/";
 
         return webClient.post().uri(url).retrieve().bodyToMono(Product.class).log(LOG.getName(), Level.FINE)
                 .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
@@ -67,7 +74,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public Mono<Product> getProduct(int productId) {
 
-        String url = productServiceUrl + productId;
+        String url = PRODUCT_SERVICE_URL + "/product/" + productId;
 
         return webClient.get().uri(url).retrieve().bodyToMono(Product.class).log(LOG.getName(), Level.FINE)
                 .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
@@ -76,7 +83,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public Mono<Void> deleteProduct(int productId) {
 
-        String url = productServiceUrl + "/" + productId;
+        String url = PRODUCT_SERVICE_URL + "/product/" + productId;
 
         return webClient.delete().uri(url).retrieve().bodyToMono(Void.class).log(LOG.getName(), Level.FINE)
                 .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
@@ -85,7 +92,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public Mono<Recommendation> createRecommendation(Recommendation body) {
 
-        String url = recommendationServiceUrl;
+        String url = RECOMMENDATION_SERVICE_URL + "/recommendation";
 
         return webClient.post().uri(url).retrieve().bodyToMono(Recommendation.class).log(LOG.getName(), Level.FINE)
                 .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
@@ -94,7 +101,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public Flux<Recommendation> getRecommendations(int productId) {
 
-        String url = recommendationServiceUrl + productId;
+        String url = RECOMMENDATION_SERVICE_URL + "/recommendation?productId=" + productId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Recommendation.class).log(LOG.getName(), Level.FINE)
                 .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
@@ -103,7 +110,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public Mono<Void> deleteRecommendation(int productId) {
 
-        String url = recommendationServiceUrl + "?productId=" + productId;
+        String url = RECOMMENDATION_SERVICE_URL + "/recommendation?productId=" + productId;
 
         return webClient.delete().uri(url).retrieve().bodyToMono(Void.class).log(LOG.getName(), Level.FINE)
                 .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
@@ -112,7 +119,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public Mono<Review> createReview(Review body) {
 
-        String url = reviewServiceUrl;
+        String url = REVIEW_SERVICE_URL + "/review";
 
         return webClient.post().uri(url).retrieve().bodyToMono(Review.class).log(LOG.getName(), Level.FINE)
                 .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
@@ -121,7 +128,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public Flux<Review> getReviews(int productId) {
 
-        String url = reviewServiceUrl + productId;
+        String url = REVIEW_SERVICE_URL + "/review?productId=" + productId;
 
         return webClient.delete().uri(url).retrieve().bodyToFlux(Review.class).log(LOG.getName(), Level.FINE)
                 .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
@@ -130,7 +137,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public Mono<Void> deleteReviews(int productId) {
 
-        String url = reviewServiceUrl + "?productId" + productId;
+        String url = REVIEW_SERVICE_URL + "/review?productId" + productId;
 
         return webClient.delete().uri(url).retrieve().bodyToMono(Void.class).log(LOG.getName(), Level.FINE)
                 .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));

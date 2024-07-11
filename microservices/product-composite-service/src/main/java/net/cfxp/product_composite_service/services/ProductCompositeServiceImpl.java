@@ -24,6 +24,7 @@ import reactor.core.publisher.Mono;;
 public class ProductCompositeServiceImpl implements ProductCompositeService {
 
         private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceImpl.class);
+
         private final ServiceUtil serviceUtil;
         private ProductCompositeIntegration integration;
 
